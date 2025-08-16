@@ -2,13 +2,20 @@ spring:
   application:
     name: ridenow
 
+
   datasource:
-    url: jdbc:mysql://localhost:3306/rnc?useSSL=false
+    url: jdbc:mysql://localhost:3306/rnc?allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
+
+jwt:
+  secret:
+    key: myjwtsec_without_hashing
+    expiration: 3600000
 
 
