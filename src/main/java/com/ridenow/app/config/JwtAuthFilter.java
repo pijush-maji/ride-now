@@ -1,5 +1,6 @@
 package com.ridenow.app.config;
 
+import com.ridenow.app.exception.InvalidTokenException;
 import com.ridenow.app.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -52,6 +53,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     );
                     token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(token);
+                }else{
+                    throw new InvalidTokenException("Token is invalid or expired");
                 }
             }
             filterChain.doFilter(request,response);

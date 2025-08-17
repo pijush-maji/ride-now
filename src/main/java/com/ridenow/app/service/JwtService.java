@@ -1,5 +1,6 @@
 package com.ridenow.app.service;
 
+import com.ridenow.app.constant.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -43,15 +45,17 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(),userDetails);
+    public String generateToken(UserDetails userDetails, UserRole roles){
+        Map<String,Object> claims = new HashMap<>();
+        claims.put("roles",new String[]{roles.toString()});
+        return generateToken(claims,userDetails);
     }
 
-    private String generateToken(HashMap<String,Object> extractClaims, UserDetails userDetails) {
+    private String generateToken(Map<String,Object> extractClaims, UserDetails userDetails) {
         return buildToken(extractClaims,userDetails,expiration);
     }
 
-    private String buildToken(HashMap<String, Object> extractClaims, UserDetails userDetails, Long expiration) {
+    private String buildToken(Map<String, Object> extractClaims, UserDetails userDetails, Long expiration) {
         return Jwts
                 .builder()
                 .setClaims(extractClaims)
